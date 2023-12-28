@@ -1,0 +1,9 @@
+{
+  "ingresos": [
+    {"fuente": "Sueldo mensual", "monto": 3500},
+    {"fuente": "Ingreso adicional (freelance)", "monto": 500},
+    {"fuente": "Reembolso de gastos", "monto": 100},
+    {"fuente": "Regalo de cumpleaños", "monto": 50},
+    {"fuente": "Venta de artículos usados", "monto": 200}
+  ]
+}

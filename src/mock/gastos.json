@@ -1,0 +1,14 @@
+{
+  "gastos": [
+    {"categoria": "Alquiler", "monto": 1200},
+    {"categoria": "Facturas de servicios", "monto": 150},
+    {"categoria": "Comestibles", "monto": 200},
+    {"categoria": "Transporte", "monto": 100},
+    {"categoria": "Comida fuera de casa", "monto": 50},
+    {"categoria": "Entretenimiento", "monto": 75},
+    {"categoria": "Ropa y accesorios", "monto": 50},
+    {"categoria": "Gastos médicos", "monto": 30},
+    {"categoria": "Gimnasio", "monto": 40},
+    {"categoria": "Ahorro mensual", "monto": 200}
+  ]
+}
