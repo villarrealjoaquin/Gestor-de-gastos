@@ -1,0 +1,54 @@
+{
+  "categoriasGastos": [
+    {
+      "id": 1,
+      "nombre": "Alquiler",
+      "descripcion": "Pago mensual de alquiler de vivienda"
+    },
+    {
+      "id": 2,
+      "nombre": "Comestibles",
+      "descripcion": "Gastos relacionados con la compra de alimentos y comestibles"
+    },
+    {
+      "id": 3,
+      "nombre": "Transporte",
+      "descripcion": "Gastos de transporte, como gasolina, transporte público, etc."
+    },
+    {
+      "id": 4,
+      "nombre": "Servicios públicos",
+      "descripcion": "Pagos de servicios públicos como electricidad, agua, gas, etc."
+    },
+    {
+      "id": 5,
+      "nombre": "Entretenimiento",
+      "descripcion": "Gastos relacionados con actividades de ocio y entretenimiento"
+    },
+    {
+      "id": 6,
+      "nombre": "Salud",
+      "descripcion": "Gastos de salud, incluyendo medicamentos, seguros de salud, etc."
+    },
+    {
+      "id": 7,
+      "nombre": "Educación",
+      "descripcion": "Gastos educativos, matrícula, libros, etc."
+    },
+    {
+      "id": 8,
+      "nombre": "Ropa",
+      "descripcion": "Compras de ropa y accesorios"
+    },
+    {
+      "id": 9,
+      "nombre": "Restaurantes",
+      "descripcion": "Gastos en comer fuera, restaurantes, comida para llevar, etc."
+    },
+    {
+      "id": 10,
+      "nombre": "Misceláneos",
+      "descripcion": "Otros gastos varios que no encajan en las categorías anteriores"
+    }
+  ]
+}
