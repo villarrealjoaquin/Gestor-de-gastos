@@ -1,4 +1,5 @@
 export interface Data {
+  labels: string[];
   datasets: Dataset[];
 }
 
