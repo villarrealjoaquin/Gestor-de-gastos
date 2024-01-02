@@ -1,9 +1,9 @@
 export interface Transaction {
   fuente: string;
-  monto: number;
+  amount: number;
   color: string;
-  categories: string[];
   type: string;
+  category: string;
 }
 
 export interface Categories {
@@ -15,5 +15,7 @@ export interface DataSetTransaction {
   data: Transaction[];
   setData: React.Dispatch<React.SetStateAction<Transaction[]>>;
 }
+
+export type TransactionType = 'gastos' | 'ingresos';
 
 export type DataTupla = [Transaction[], React.Dispatch<React.SetStateAction<Transaction[]>>] 

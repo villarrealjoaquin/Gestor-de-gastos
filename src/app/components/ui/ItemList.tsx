@@ -5,7 +5,7 @@ interface Props<T> {
   className?: string;
 }
 
-export default function TransactionsList<T>({
+export default function ItemList<T>({
   renderList,
   extractId,
   list,

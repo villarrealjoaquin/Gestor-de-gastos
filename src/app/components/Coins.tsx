@@ -1,4 +1,4 @@
-import { Coin } from "./Icon";
+import { Coin } from ".";
 
 export default function Coins() {
   return (
