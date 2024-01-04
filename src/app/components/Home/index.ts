@@ -1,5 +1,6 @@
 export { default as BalanceTransaction } from './BalanceTransaction';
 export { default as CategoriesTransaction } from './CategoriesTransaction';
+export { default as Graphic } from './Graphic';
 export { default as GraphicDataContainer } from './GraphicDataContainer';
 export { default as ToggleButtonTransaction } from './ToggleButtonTransaction';
 export { default as TotalBalanceAccount } from './TotalBalanceAccount';

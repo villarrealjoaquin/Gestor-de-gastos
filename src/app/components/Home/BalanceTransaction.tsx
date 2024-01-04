@@ -1,4 +1,5 @@
-import { TransactionType } from "@/models";
+import { formatCurrency } from "@/helpers";
+import type { TransactionType } from "@/models";
 
 interface Props {
   transactionType: TransactionType;
@@ -7,10 +8,11 @@ interface Props {
 
 export default function BalanceTransaction({ transactionType, balance }: Props) {
   return (
-    <>
-      <section className="font-bold mt-2">
-        Mis {transactionType}: <span>$ {balance} </span>
-      </section>
-    </>
-  )
+    <section>
+      <div className="font-bold flex items-center justify-center text-center gap-2 mt-2">
+        <p className="text-center">Mis {transactionType}:</p>
+        <span className="text-center">{formatCurrency(balance)}</span>
+      </div>
+    </section>
+  );
 }

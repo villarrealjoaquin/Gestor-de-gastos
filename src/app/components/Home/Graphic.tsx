@@ -1,7 +1,7 @@
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { Coins } from "..";
-import { TransactionData } from "@/models";
+import type { TransactionData } from "@/models";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 

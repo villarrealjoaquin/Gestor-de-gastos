@@ -1,26 +1,14 @@
 export default function Loader() {
   return (
     <>
-      <section className="h-[150px] flex ">
-        <div className="loader">
-          <div className="circle">
-            <div className="dot"></div>
-            <div className="outline"></div>
-          </div>
-          <div className="circle">
-            <div className="dot"></div>
-            <div className="outline"></div>
-          </div>
-          <div className="circle">
-            <div className="dot"></div>
-            <div className="outline"></div>
-          </div>
-          <div className="circle">
-            <div className="dot"></div>
-            <div className="outline"></div>
-          </div>
-        </div>
-      </section>
+      <div className="wrapper">
+        <div className="circle"></div>
+        <div className="circle"></div>
+        <div className="circle"></div>
+        <div className="shadow"></div>
+        <div className="shadow"></div>
+        <div className="shadow"></div>
+      </div>
     </>
   )
 }

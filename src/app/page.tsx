@@ -2,14 +2,16 @@
 
 import { expenses, income, initialState } from '@/constants';
 import { calculateTotal, formatCurrency, getRandomColor, processTransactionData, verifyCategories } from '@/helpers';
+import { useLoad, useMemory } from '@/hooks';
 import type { DataTupla, Transaction, TransactionData, TransactionType, UpdateData } from '@/models';
 import { ERROR_MESSAGES } from '@/models';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   BalanceTransaction,
   CategoriesTransaction,
   Graphic,
   GraphicDataContainer,
+  Skeleton,
   ToggleButtonTransaction,
   TotalBalanceAccount,
   TransactionList,
@@ -23,19 +25,26 @@ const addNewTransaction = (dataSet: DataTupla, transaction: Transaction) => {
 };
 
 export default function Home() {
-  const [data, setData] = useState<TransactionData>(initialState);
-  const [expensesData, setExpensesData] = useState<Transaction[]>([]);
-  const [incomeData, setIncomeData] = useState<Transaction[]>([]);
+  const [data, setData] = useMemory<TransactionData>('data', initialState);
+  const [expensesData, setExpensesData] = useMemory<Transaction[]>('expenses', []);
+  const [incomeData, setIncomeData] = useMemory<Transaction[]>('income', []);
+  const [balance, setBalance] = useMemory('balance', 0);
   const [transactionType, setTransactionType] = useState<TransactionType>(income);
-  const [balance, setBalance] = useState<number>(0);
   const [amount, setAmount] = useState<number | null>(null);
   const [category, setCategory] = useState('');
   const [error, setError] = useState<ERROR_MESSAGES | string>('');
-  const [transactionsCategories, setTransactionsCategories] = useState<string[]>([]);
   const myModalCategoryRef = useRef<HTMLDialogElement>(null);
   const myModalCreateCategoryRef = useRef<HTMLDialogElement>(null);
-
+  const { transactionsCategories, isLocalStorageLoaded, setTransactionsCategories } = useLoad();
+  
   const transactionList = transactionType === expenses ? expensesData : incomeData;
+
+  const calculateAndSetPercentages = useCallback(() => {
+    let dataSet = transactionList;
+    const total = calculateTotal(dataSet);
+    const { percentages, backgroundColors, labels } = processTransactionData(dataSet, total);
+    updateDataAndBalance(total, { percentages, backgroundColors, labels });
+  }, [expensesData, incomeData, transactionType]);
 
   const handleTransactionSave = (ref: React.RefObject<HTMLDialogElement>) => {
     if (Number(amount) < 1) return setError(ERROR_MESSAGES.AMOUNT_LESS_THAN_ONE);
@@ -50,10 +59,13 @@ export default function Home() {
 
     const verifyAllCategories = verifyCategories(transactionsCategories, category);
     if (!verifyAllCategories) {
-      setTransactionsCategories(prevState => [...prevState, category]);
+      const newCategoriesArray = [...transactionsCategories, category]
+      setTransactionsCategories(newCategoriesArray);
     }
 
-    const existCategory = dataTransaction.some(existingCategory => existingCategory.category.includes(category));
+    const existCategory = dataTransaction.some(
+      existingCategory => existingCategory.category.toLowerCase().includes(category.toLowerCase())
+    );
     if (!existCategory) {
       const newTransaction: Transaction = {
         fuente: category,
@@ -64,21 +76,14 @@ export default function Home() {
       };
       addNewTransaction(transactionDataSet, newTransaction);
     } else {
-      const findIndexCategory = dataTransaction.findIndex(transaction => transaction.category === category);
-      if (findIndexCategory !== -1) {
-        updateExistingTransaction(findIndexCategory, dataTransaction);
-      }
+      const findIndexCategory = dataTransaction.findIndex(
+        transaction => transaction.category.toLowerCase() === category.toLowerCase()
+      );
+      if (findIndexCategory !== -1) updateExistingTransaction(findIndexCategory, dataTransaction);
     }
     clearInputs();
     ref.current?.close();
-  };
-
-  const calculateAndSetPercentages = () => {
-    let dataSet = transactionList;
-    const total = calculateTotal(dataSet);
-    const { percentages, backgroundColors, labels } = processTransactionData(dataSet, total);
-    updateDataAndBalance(total, { percentages, backgroundColors, labels });
-  };
+  }
 
   const updateExistingTransaction = (index: number, dataTransaction: Transaction[]) => {
     const transaction = dataTransaction[index];
@@ -87,7 +92,7 @@ export default function Home() {
       const total = calculateTotal(dataTransaction);
       const { percentages, backgroundColors, labels } = processTransactionData(dataTransaction, total);
       updateDataAndBalance(newAmount, { percentages, backgroundColors, labels });
-    }
+    };
   };
 
   const updateDataAndBalance = (newAmount: number, { labels, percentages, backgroundColors }: UpdateData) => {
@@ -95,8 +100,8 @@ export default function Home() {
     const cleanedAmount = formatAmount.replace(/[^0-9.-]+/g, '');
     const numericAmount = parseFloat(cleanedAmount);
 
-    setBalance(numericAmount);
-    setData(prevData => ({
+    setBalance((prevBalance: number) => prevBalance + numericAmount);
+    setData((prevData: TransactionData) => ({
       labels,
       datasets: [{
         ...prevData.datasets[0],
@@ -105,6 +110,15 @@ export default function Home() {
       }],
     }));
   };
+
+  const updateTransactionState = (newState: Transaction[]) => {
+    const transactionDataSet: DataTupla = transactionType === income
+      ? [incomeData, setIncomeData]
+      : [expensesData, setExpensesData];
+
+    const [_, setState] = transactionDataSet
+    setState(newState);
+  }
 
   const calculateTotalBalance = () => {
     const incomeTotal = calculateTotal(incomeData);
@@ -138,13 +152,15 @@ export default function Home() {
 
   useEffect(() => {
     calculateAndSetPercentages();
-  }, [expensesData, incomeData, transactionType]);
+  }, [calculateAndSetPercentages]);
+
+  if (!isLocalStorageLoaded) return <Skeleton />
 
   return (
     <main className="flex flex-col gap-3 items-center min-h-screen py-3">
       <GraphicDataContainer>
         <ToggleButtonTransaction
-          handleTransactionTypeToggle={handleTransactionTypeToggle}
+          onHandleTransactionTypeToggle={handleTransactionTypeToggle}
           transactionType={transactionType}
         />
         <TotalBalanceAccount calculateTotalBalance={calculateTotalBalance} />
@@ -163,16 +179,18 @@ export default function Home() {
         transactionsCategories={transactionsCategories}
         myModalCreateCategoryRef={myModalCreateCategoryRef}
         myModalCategoryRef={myModalCategoryRef}
-        handleAmountChange={handleAmountChange}
-        handleCategoryChange={handleCategoryChange}
-        handleCategoryCreation={handleCategoryCreation}
-        handleTransactionSave={handleTransactionSave}
+        onHandleAmountChange={handleAmountChange}
+        onHandleCategoryChange={handleCategoryChange}
+        onHandleCategoryCreation={handleCategoryCreation}
+        onHandleTransactionSave={handleTransactionSave}
       />
 
       <CategoriesTransaction transactionList={transactionList} />
+
       <TransactionList
         transactionList={transactionList}
         transactionType={transactionType}
+        updateTransactionState={updateTransactionState}
       />
     </main>
   )

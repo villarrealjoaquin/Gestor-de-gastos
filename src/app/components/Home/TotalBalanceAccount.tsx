@@ -5,7 +5,7 @@ export default function TotalBalanceAccount({ calculateTotalBalance }: { calcula
     <>
       <section className='my-2 text-lg font-bold'>
         {Boolean(calculateTotalBalance()) ? (
-          <p className="text-center">Balance general: <span>{calculateTotalBalance()}</span></p>
+          <p className="text-center">Balance general: <span>{calculateTotalBalance()} ARS</span></p>
         ) : (
           <p className="text-center">No hay balance disponible actualmente</p>
         )}

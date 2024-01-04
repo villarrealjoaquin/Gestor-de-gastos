@@ -1,4 +1,4 @@
-import { TransactionType } from "@/models"
+import type { TransactionType } from "@/models"
 import { ModalTransaction } from "..";
 import clsx from "clsx";
 
@@ -10,10 +10,10 @@ interface Props {
   error: string;
   amount: number | null;
   transactionsCategories: string[];
-  handleAmountChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleCategoryChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  handleCategoryCreation: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleTransactionSave: (ref: React.RefObject<HTMLDialogElement>) => void;
+  onHandleAmountChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onHandleCategoryChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onHandleCategoryCreation: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onHandleTransactionSave: (ref: React.RefObject<HTMLDialogElement>) => void;
 }
 
 export default function TransactionSection({
@@ -24,10 +24,10 @@ export default function TransactionSection({
   amount,
   transactionsCategories,
   error,
-  handleAmountChange,
-  handleCategoryCreation,
-  handleTransactionSave,
-  handleCategoryChange,
+  onHandleAmountChange,
+  onHandleCategoryCreation,
+  onHandleTransactionSave,
+  onHandleCategoryChange,
 }: Props) {
   return (
     <>
@@ -38,7 +38,7 @@ export default function TransactionSection({
             <button
               className='btn font-bold'
               onClick={() => myModalCreateCategoryRef.current?.showModal()}
-              disabled={!transactionsCategories.length}
+              disabled={transactionsCategories?.length === 0}
             >
               Categorias
             </button>
@@ -61,7 +61,7 @@ export default function TransactionSection({
             className="input input-ghost w-full max-w-xs input-bordered"
             value={amount !== null ? amount.toString() : ''}
             placeholder="ej: 10"
-            onChange={handleAmountChange}
+            onChange={onHandleAmountChange}
           />
           <label>Crear categoria: </label>
           <input
@@ -69,12 +69,12 @@ export default function TransactionSection({
             placeholder='ej: alquiler'
             className="input input-ghost w-full max-w-xs input-bordered"
             value={category}
-            onChange={handleCategoryCreation}
+            onChange={onHandleCategoryCreation}
           />
           {error && <p className="text-[red] text-sm">{error}</p>}
           <article className="modal-action flex justify-center items-center">
             <button type="button" className="btn" onClick={() => myModalCategoryRef.current?.close()}>Cancelar</button>
-            <button type="button" className="btn" onClick={() => handleTransactionSave(myModalCategoryRef)}>Guardar</button>
+            <button type="button" className="btn btn-primary" onClick={() => onHandleTransactionSave(myModalCategoryRef)}>Guardar</button>
           </article>
         </form>
       </ModalTransaction>
@@ -88,24 +88,25 @@ export default function TransactionSection({
             placeholder="ej: 10"
             value={amount !== null ? amount.toString() : ''}
             className="input input-ghost w-full max-w-xs input-bordered"
-            onChange={handleAmountChange}
+            onChange={onHandleAmountChange}
           />
           {error && <p className="text-[red] text-sm">{error}</p>}
           <label htmlFor="categoria">Categoría: </label>
           <select
-            onChange={handleCategoryChange}
-            className={clsx('select select-ghost w-full max-w-x sselect-bordered', transactionsCategories.length < 1 && 'opacity-50 cursor-not-allowed')}
-            disabled={transactionsCategories.length < 1}
+            id="category"
+            onChange={onHandleCategoryChange}
+            className={clsx('select select-ghost w-full max-w-x sselect-bordered', transactionsCategories?.length < 1 && 'opacity-50 cursor-not-allowed')}
+            disabled={transactionsCategories?.length < 1}
             value={category}
           >
             <option>Selecciona una categoria</option>
-            {transactionsCategories.map((category, i) => (
+            {transactionsCategories?.map((category, i) => (
               <option key={`${i} - ${category}`}>{category}</option>
             ))}
           </select>
           <article className="modal-action flex justify-center items-center">
             <button type="button" className="btn" onClick={() => myModalCreateCategoryRef.current?.close()}>Cancelar</button>
-            <button type="button" className="btn" onClick={() => handleTransactionSave(myModalCreateCategoryRef)}>Guardar</button>
+            <button type="button" className="btn btn-primary" onClick={() => onHandleTransactionSave(myModalCreateCategoryRef)}>Guardar</button>
           </article>
         </form>
       </ModalTransaction>

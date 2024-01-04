@@ -1,4 +1,4 @@
-import { Transaction } from "@/models";
+import type { Transaction } from "@/models";
 import { ItemList } from "..";
 
 interface Props {

@@ -1,25 +1,25 @@
 import { expenses, income } from "@/constants";
-import { TransactionType } from "@/models";
+import type { TransactionType } from "@/models";
 
 interface Props {
-  handleTransactionTypeToggle: (transaction: TransactionType) => void;
+  onHandleTransactionTypeToggle: (transaction: TransactionType) => void;
   transactionType: TransactionType;
 }
 
-export default function ToggleButtonTransaction({ handleTransactionTypeToggle, transactionType }: Props) {
+export default function ToggleButtonTransaction({ onHandleTransactionTypeToggle, transactionType }: Props) {
   return (
     <>
       <section className='flex gap-3 my-2'>
         <button
           className="btn"
-          onClick={() => handleTransactionTypeToggle(expenses)}
+          onClick={() => onHandleTransactionTypeToggle(expenses)}
           disabled={transactionType === expenses}
         >
           Gastos
         </button>
         <button
           className='btn'
-          onClick={() => handleTransactionTypeToggle(income)}
+          onClick={() => onHandleTransactionTypeToggle(income)}
           disabled={transactionType === income}
         >
           Ingresos

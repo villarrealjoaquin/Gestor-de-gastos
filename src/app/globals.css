@@ -5,6 +5,7 @@
 body {
   background-color: #69616f;
   background-color: #222222;
+  background-color: #000;
   color: #fff;
 
   width: 100%;
@@ -58,142 +59,91 @@ section::-webkit-scrollbar-track {
   }
 }
 
-.loader {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  --color: hsl(0, 0%, 87%);
-  --animation: 2s ease-in-out infinite;
-}
-
-.loader .circle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.wrapper {
+  width: 200px;
+  height: 60px;
   position: relative;
-  width: 20px;
-  height: 20px;
-  border: solid 2px var(--color);
-  border-radius: 50%;
-  margin: 0 10px;
-  background-color: transparent;
-  animation: circle-keys var(--animation);
+  z-index: 1;
 }
 
-.loader .circle .dot {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background-color: var(--color);
-  animation: dot-keys var(--animation);
-}
-
-.loader .circle .outline {
-  position: absolute;
-  transform: translate(-50%, -50%);
+.circle {
   width: 20px;
   height: 20px;
+  position: absolute;
   border-radius: 50%;
-  animation: outline-keys var(--animation);
+  background-color: #fff;
+  left: 15%;
+  transform-origin: 50%;
+  animation: circle7124 .5s alternate infinite ease;
+}
+
+@keyframes circle7124 {
+  0% {
+    top: 60px;
+    height: 5px;
+    border-radius: 50px 50px 25px 25px;
+    transform: scaleX(1.7);
+  }
+
+  40% {
+    height: 20px;
+    border-radius: 50%;
+    transform: scaleX(1);
+  }
+
+  100% {
+    top: 0%;
+  }
 }
 
 .circle:nth-child(2) {
-  animation-delay: 0.3s;
+  left: 45%;
+  animation-delay: .2s;
 }
 
 .circle:nth-child(3) {
-  animation-delay: 0.6s;
+  left: auto;
+  right: 15%;
+  animation-delay: .3s;
 }
 
-.circle:nth-child(4) {
-  animation-delay: 0.9s;
+.shadow {
+  width: 20px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: rgba(0,0,0,0.9);
+  position: absolute;
+  top: 62px;
+  transform-origin: 50%;
+  z-index: -1;
+  left: 15%;
+  filter: blur(1px);
+  animation: shadow046 .5s alternate infinite ease;
 }
 
-.circle:nth-child(5) {
-  animation-delay: 1.2s;
-}
-
-.circle:nth-child(2) .dot {
-  animation-delay: 0.3s;
-}
-
-.circle:nth-child(3) .dot {
-  animation-delay: 0.6s;
-}
-
-.circle:nth-child(4) .dot {
-  animation-delay: 0.9s;
-}
-
-.circle:nth-child(5) .dot {
-  animation-delay: 1.2s;
-}
-
-.circle:nth-child(1) .outline {
-  animation-delay: 0.9s;
-}
-
-.circle:nth-child(2) .outline {
-  animation-delay: 1.2s;
-}
-
-.circle:nth-child(3) .outline {
-  animation-delay: 1.5s;
-}
-
-.circle:nth-child(4) .outline {
-  animation-delay: 1.8s;
-}
-
-.circle:nth-child(5) .outline {
-  animation-delay: 2.1s;
-}
-
-@keyframes circle-keys {
+@keyframes shadow046 {
   0% {
-    transform: scale(1);
-    opacity: 1;
+    transform: scaleX(1.5);
   }
 
-  50% {
-    transform: scale(1.5);
-    opacity: 0.5;
+  40% {
+    transform: scaleX(1);
+    opacity: .7;
   }
 
   100% {
-    transform: scale(1);
-    opacity: 1;
+    transform: scaleX(.2);
+    opacity: .4;
   }
 }
 
-@keyframes dot-keys {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(0);
-  }
-
-  100% {
-    transform: scale(1);
-  }
+.shadow:nth-child(4) {
+  left: 45%;
+  animation-delay: .2s
 }
 
-@keyframes outline-keys {
-  0% {
-    transform: scale(0);
-    outline: solid 20px var(--color);
-    outline-offset: 0;
-    opacity: 1;
-  }
-
-  100% {
-    transform: scale(1);
-    outline: solid 0 transparent;
-    outline-offset: 20px;
-    opacity: 0;
-  }
+.shadow:nth-child(5) {
+  left: auto;
+  right: 15%;
+  animation-delay: .3s;
 }
