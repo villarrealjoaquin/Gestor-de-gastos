@@ -84,24 +84,7 @@ export default function TransactionList({ transactionList, transactionType, upda
         <form className="flex flex-col gap-4 m-auto" onSubmit={handleSubmit}>
           <h3 className="font-bold text-lg text-center my-3">Gestionar Transacción</h3>
 
-          <label htmlFor="amount">Monto:</label>
-          <input
-            type="number"
-            id="amount"
-            className="input input-ghost w-full max-w-xs input-bordered"
-            placeholder="Nuevo monto"
-          />
-
-          <label htmlFor="category">Categoría:</label>
-          <select
-            id="category"
-            className="select select-ghost w-full max-w-xs select-bordered"
-          >
-            <option value="">Selecciona una categoría</option>
-          </select>
-
           <label>¿Estás seguro de eliminar esta transacción?</label>
-
           <article className="modal-action flex justify-center items-center">
             <button className="btn" onClick={cancelDeleteTransaction}>
               Cancelar

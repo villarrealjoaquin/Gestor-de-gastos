@@ -36,7 +36,6 @@ export default function Home() {
   const myModalCategoryRef = useRef<HTMLDialogElement>(null);
   const myModalCreateCategoryRef = useRef<HTMLDialogElement>(null);
   const { transactionsCategories, isLocalStorageLoaded, setTransactionsCategories } = useLoad();
-  
   const transactionList = transactionType === expenses ? expensesData : incomeData;
 
   const calculateAndSetPercentages = useCallback(() => {
@@ -100,7 +99,7 @@ export default function Home() {
     const cleanedAmount = formatAmount.replace(/[^0-9.-]+/g, '');
     const numericAmount = parseFloat(cleanedAmount);
 
-    setBalance((prevBalance: number) => prevBalance + numericAmount);
+    setBalance(numericAmount);
     setData((prevData: TransactionData) => ({
       labels,
       datasets: [{
