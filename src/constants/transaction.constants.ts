@@ -6,11 +6,11 @@ export const income = 'ingresos';
 export const initialState: TransactionData = {
   labels: [],
   datasets: [{
-    label: 'Ingresos',
+    label: 'Transaccion',
     data: [],
     backgroundColor: [],
     borderColor: "white",
     borderWidth: 2,
     hoverOffset: 4,
   }]
-};
+} as const;

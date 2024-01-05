@@ -12,8 +12,8 @@ const options = {
 export default function Graphic({ data }: { data: TransactionData }) {
   return (
     <>
-      <section className='relative w-[280px] h-[280px] flex justify-center items-center sm:w-[350px] sm:h-[350px]'>
-        {data.labels.length > 0
+      <section className='relative w-[280px] h-[280px] flex justify-center items-center sm:w-[350px] sm:h-[320px]'>
+        {data.datasets[0].data.length > 0
           ? <Doughnut
             data={data}
             options={options}

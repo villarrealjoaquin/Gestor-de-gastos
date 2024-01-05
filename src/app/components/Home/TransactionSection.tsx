@@ -33,7 +33,7 @@ export default function TransactionSection({
     <>
       <section className="bg-[#151515] w-[90%] sm:w-[550px] md:w-[750px] py-1 px-2 rounded-lg">
         <article className="flex flex-col items-center justify-between gap-3 p-2 w-full sm:flex-row">
-          <h3 className='mx-2 font-bold text-[.9rem]'>Mis {transactionType}</h3>
+          <h3 className='mx-2 font-bold text-[.9rem] animated' key={transactionType}>Mis {transactionType}</h3>
           <article className='flex gap-3 flex-col sm:flex-row'>
             <button
               className='btn font-bold'
