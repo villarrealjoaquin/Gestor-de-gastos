@@ -18,6 +18,12 @@ import {
   TransactionSection
 } from './components';
 
+interface ValidateTransaction {
+  existCategory: boolean;
+  transactionDataSet: DataTupla;
+  dataTransaction: Transaction[]
+}
+
 const addNewTransaction = (dataSet: DataTupla, transaction: Transaction) => {
   const [state, setState] = dataSet;
   const newTransaction = [...state, transaction];
@@ -30,53 +36,45 @@ export default function Home() {
   const [incomeData, setIncomeData] = useMemory<Transaction[]>('income', []);
   const [balance, setBalance] = useMemory('balance', 0);
   const [transactionType, setTransactionType] = useState<TransactionType>(income);
-  const [amount, setAmount] = useState<number | null>(null);
+  const [transactionAmount, setTransactionAmount] = useState<number | null>(null);
   const [category, setCategory] = useState('');
-  const [error, setError] = useState<ERROR_MESSAGES | string>('');
+  const [transactionError, setTransactionError] = useState<ERROR_MESSAGES | string>('');
   const myModalCategoryRef = useRef<HTMLDialogElement>(null);
   const myModalCreateCategoryRef = useRef<HTMLDialogElement>(null);
   const { transactionsCategories, isLocalStorageLoaded, setTransactionsCategories } = useLoad();
-  const transactionList = transactionType === expenses ? expensesData : incomeData;
+
+  const transaction: Transaction[] = transactionType === expenses ? expensesData : incomeData;
 
   const calculateAndSetPercentages = useCallback(() => {
-    let dataSet = transactionList;
+    let dataSet = transaction;
     const total = calculateTotal(dataSet);
     const { percentages, backgroundColors, labels } = processTransactionData(dataSet, total);
     updateDataAndBalance(total, { percentages, backgroundColors, labels });
   }, [expensesData, incomeData, transactionType]);
 
   const handleTransactionSave = (ref: React.RefObject<HTMLDialogElement>) => {
-    if (Number(amount) < 1) return setError(ERROR_MESSAGES.AMOUNT_LESS_THAN_ONE);
-    if (category.length <= 2) return setError(ERROR_MESSAGES.CATEGORY_TOO_SHORT);
+    if (Number(transactionAmount) < 1) return setTransactionError(ERROR_MESSAGES.AMOUNT_LESS_THAN_ONE);
+    if (category.length <= 2) return setTransactionError(ERROR_MESSAGES.CATEGORY_TOO_SHORT);
 
-    const newColorTransaction = getRandomColor();
     const transactionDataSet: DataTupla = transactionType === income
       ? [incomeData, setIncomeData]
       : [expensesData, setExpensesData];
 
     const [dataTransaction] = transactionDataSet;
 
-    const verifyAllCategories = verifyCategories(transactionsCategories, category);
-    if (!verifyAllCategories) {
-      const newCategoriesArray = [...transactionsCategories, category]
-      setTransactionsCategories(newCategoriesArray);
-    }
-
-    const existCategory = dataTransaction.some(
-      existingCategory => existingCategory.category.toLowerCase().includes(category.toLowerCase())
-    );
-    if (!existCategory) {
+    if (!validateTransactionData(dataTransaction)) {
+      const newColorTransaction = getRandomColor();
       const newTransaction: Transaction = {
         fuente: category,
-        amount: Number(amount),
+        amount: Number(transactionAmount),
         color: newColorTransaction,
         type: transactionType,
         category,
       };
       addNewTransaction(transactionDataSet, newTransaction);
     } else {
-      const findIndexCategory = dataTransaction.findIndex(
-        transaction => transaction.category.toLowerCase() === category.toLowerCase()
+      const findIndexCategory: number = dataTransaction.findIndex(
+        (transaction: Transaction) => transaction.category.toLowerCase() === category.toLowerCase()
       );
       if (findIndexCategory !== -1) updateExistingTransaction(findIndexCategory, dataTransaction);
     }
@@ -84,10 +82,24 @@ export default function Home() {
     ref.current?.close();
   }
 
+  const validateTransactionData = (data: Transaction[]) => {
+    const verifyAllCategories: boolean = verifyCategories(transactionsCategories, category);
+    if (!verifyAllCategories) {
+      const newCategoriesArray = [...transactionsCategories, category]
+      setTransactionsCategories(newCategoriesArray);
+    };
+
+    const existCategory: boolean = data.some(
+      existingCategory => existingCategory.category.toLowerCase().includes(category.toLowerCase())
+    );
+
+    return existCategory;
+  }
+
   const updateExistingTransaction = (index: number, dataTransaction: Transaction[]) => {
     const transaction = dataTransaction[index];
-    if (transaction && amount) {
-      const newAmount = transaction.amount += amount;
+    if (transaction && transactionAmount) {
+      const newAmount = transaction.amount += transactionAmount;
       const total = calculateTotal(dataTransaction);
       const { percentages, backgroundColors, labels } = processTransactionData(dataTransaction, total);
       updateDataAndBalance(newAmount, { percentages, backgroundColors, labels });
@@ -131,7 +143,7 @@ export default function Home() {
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const amountValue = Number(e.target.value);
-    setAmount(amountValue);
+    setTransactionAmount(amountValue);
   };
 
   const handleCategoryCreation = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,9 +156,9 @@ export default function Home() {
   };
 
   const clearInputs = () => {
-    setAmount(null);
+    setTransactionAmount(null);
     setCategory('');
-    setError('');
+    setTransactionError('');
   };
 
   useEffect(() => {
@@ -172,9 +184,9 @@ export default function Home() {
 
       <TransactionSection
         transactionType={transactionType}
-        amount={amount}
+        amount={transactionAmount}
         category={category}
-        error={error}
+        error={transactionError}
         transactionsCategories={transactionsCategories}
         myModalCreateCategoryRef={myModalCreateCategoryRef}
         myModalCategoryRef={myModalCategoryRef}
@@ -184,11 +196,12 @@ export default function Home() {
         onHandleTransactionSave={handleTransactionSave}
       />
 
-      <CategoriesTransaction transactionList={transactionList} />
+      <CategoriesTransaction transactionList={transaction} />
 
       <TransactionList
-        transactionList={transactionList}
+        transactionList={transaction}
         transactionType={transactionType}
+        transactionsCategories={transactionsCategories}
         updateTransactionState={updateTransactionState}
       />
     </main>

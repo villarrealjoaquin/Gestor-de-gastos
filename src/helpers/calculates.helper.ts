@@ -1,7 +1,11 @@
 import { Transaction } from "@/models";
 
 export const calculateTotal = (dataSet: Transaction[]) => {
-  return dataSet.reduce((acc, curr) => acc + curr.amount, 0);
+  let total = 0;
+  for (let transaction of dataSet) {
+    total += transaction.amount;
+  }
+  return total;
 };
 
 export const calculatePercentages = (dataSet: Transaction[], total: number) => {
