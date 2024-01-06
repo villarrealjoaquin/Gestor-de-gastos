@@ -8,7 +8,6 @@ interface Props {
   transactionList: Transaction[];
   transactionType: TransactionType;
   transactionsCategories: string[];
-  transactionsCategories: string[];
   updateTransactionState: (newState: Transaction[]) => void;
 }
 
@@ -67,7 +66,6 @@ export default function TransactionList({
     updateTransactionState(modifyTransaction);
     cancelDeleteTransaction();
   };
-
 
   const cancelDeleteTransaction = () => {
     modalOption.current?.close();
