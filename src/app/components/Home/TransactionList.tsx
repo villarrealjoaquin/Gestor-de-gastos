@@ -8,6 +8,7 @@ interface Props {
   transactionList: Transaction[];
   transactionType: TransactionType;
   transactionsCategories: string[];
+  transactionsCategories: string[];
   updateTransactionState: (newState: Transaction[]) => void;
 }
 
@@ -44,12 +45,16 @@ export default function TransactionList({
     const transactionListIndex = transactionList.findIndex(
       transaction => transaction.fuente === selectedTransaction
     );
-
+  
     if (transactionListIndex === -1) return;
     transactionList.splice(transactionListIndex, 1);
-
     updateTransactionState([...transactionList]);
     cancelDeleteTransaction();
+  };
+  
+  const selectActionFromModal = (action: ActionType) => {
+    setSelectedAction(action);
+    setShowActions(false);
   };
 
   const updateTransactionFromModal = () => {
@@ -63,10 +68,6 @@ export default function TransactionList({
     cancelDeleteTransaction();
   };
 
-  const selectActionFromModal = (action: ActionType) => {
-    setSelectedAction(action);
-    setShowActions(false);
-  };
 
   const cancelDeleteTransaction = () => {
     modalOption.current?.close();

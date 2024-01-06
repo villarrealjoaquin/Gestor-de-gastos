@@ -18,6 +18,12 @@ import {
   TransactionSection
 } from './components';
 
+interface ValidateTransaction {
+  existCategory: boolean;
+  transactionDataSet: DataTupla;
+  dataTransaction: Transaction[]
+}
+
 const addNewTransaction = (dataSet: DataTupla, transaction: Transaction) => {
   const [state, setState] = dataSet;
   const newTransaction = [...state, transaction];
