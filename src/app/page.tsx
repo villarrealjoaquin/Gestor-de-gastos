@@ -17,6 +17,7 @@ import {
   TransactionList,
   TransactionSection
 } from './components';
+import { toast } from 'sonner';
 
 const addNewTransaction = (dataSet: DataTupla, transaction: Transaction) => {
   const [state, setState] = dataSet;
@@ -29,7 +30,7 @@ export default function Home() {
   const [expensesData, setExpensesData] = useMemory<Transaction[]>(LocalStorageKeys.EXPENSES, []);
   const [incomeData, setIncomeData] = useMemory<Transaction[]>(LocalStorageKeys.INCOMES, []);
   const [balance, setBalance] = useMemory(LocalStorageKeys.BALANCE, 0);
-  const [transactionType, setTransactionType] = useState<TransactionType>(income);
+  const [transactionType, setTransactionType] = useMemory<TransactionType>(LocalStorageKeys.TRANSACTION_TYPE, income);
   const [transactionAmount, setTransactionAmount] = useState<number | null>(null);
   const [category, setCategory] = useState('');
   const [transactionError, setTransactionError] = useState<ERROR_MESSAGES | string>('');
@@ -59,6 +60,7 @@ export default function Home() {
     saveTransaction(dataTransaction, transactionDataSet);
     clearInputs();
     ref.current?.close();
+    toast.success(`Se creo correctamente su ${transactionType === income ? 'ingreso' : 'gasto'}`);
   };
 
   const validateTransactionData = (data: Transaction[]) => {
@@ -105,10 +107,8 @@ export default function Home() {
 
   const updateDataAndBalance = (newAmount: number, { labels, percentages, backgroundColors }: UpdateData) => {
     const formatAmount = formatCurrency(newAmount);
-    const cleanedAmount = formatAmount.replace(/[^0-9.-]+/g, '');
-    const numericAmount = parseFloat(cleanedAmount);
 
-    setBalance(numericAmount);
+    setBalance(formatAmount);
     setData((prevData: TransactionData) => ({
       labels,
       datasets: [{
@@ -198,7 +198,6 @@ export default function Home() {
       <TransactionList
         transactionList={transaction}
         transactionType={transactionType}
-        transactionsCategories={transactionsCategories}
         updateTransactionState={updateTransactionState}
       />
     </main>

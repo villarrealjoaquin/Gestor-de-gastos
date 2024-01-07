@@ -11,6 +11,6 @@ export const initialState: TransactionData = {
     backgroundColor: [],
     borderColor: "white",
     borderWidth: 2,
-    hoverOffset: 4,
+    hoverOffset: 2,
   }]
 } as const;

@@ -1,13 +1,14 @@
 import { expenses } from "@/constants";
+import { formatCurrency } from "@/helpers";
 import type { Transaction, TransactionType } from "@/models";
 import clsx from "clsx";
 import { useRef, useState } from "react";
 import { Loader, ModalTransaction } from "..";
+import { toast } from "sonner";
 
 interface Props {
   transactionList: Transaction[];
   transactionType: TransactionType;
-  transactionsCategories: string[];
   updateTransactionState: (newState: Transaction[]) => void;
 }
 
@@ -21,7 +22,6 @@ type ActionType = typeof ACTIONS[keyof typeof ACTIONS];
 export default function TransactionList({
   transactionList,
   transactionType,
-  transactionsCategories,
   updateTransactionState,
 }: Props) {
   const [selectedTransaction, setSelectedTransaction] = useState<string | null>(null);
@@ -44,13 +44,14 @@ export default function TransactionList({
     const transactionListIndex = transactionList.findIndex(
       transaction => transaction.fuente === selectedTransaction
     );
-  
+
     if (transactionListIndex === -1) return;
     transactionList.splice(transactionListIndex, 1);
     updateTransactionState([...transactionList]);
     cancelDeleteTransaction();
+    toast.success('se elimino la transaccion correctamente!');
   };
-  
+
   const selectActionFromModal = (action: ActionType) => {
     setSelectedAction(action);
     setShowActions(false);
@@ -65,6 +66,7 @@ export default function TransactionList({
 
     updateTransactionState(modifyTransaction);
     cancelDeleteTransaction();
+    toast.success('se modifico el monto correctamente!');
   };
 
   const cancelDeleteTransaction = () => {
@@ -99,7 +101,7 @@ export default function TransactionList({
                   </td>
                   <td className={clsx('py-2 text-right', transactionType === expenses ? 'text-red-500' : 'text-green-500')}>
                     <div className="flex justify-center items-center gap-3 animated">
-                      <p>{item.amount} $</p>
+                      <p>{formatCurrency(item.amount)}</p>
                       <button className="text-white text-lg" onClick={() => handleSelectTransaction(item.fuente)}>...</button>
                     </div>
                   </td>
@@ -123,6 +125,9 @@ export default function TransactionList({
             <>
               <h4 className="text-center font-bold">Que accion te gustaria tomar?</h4>
               <div className="flex justify-center gap-4">
+                <button className="btn" onClick={cancelDeleteTransaction}>
+                  cancelar
+                </button>
                 <button className="btn" onClick={() => selectActionFromModal(ACTIONS.UPDATE)}>
                   Actualizar Monto
                 </button>
@@ -157,17 +162,6 @@ export default function TransactionList({
                 placeholder="Nuevo monto"
                 onChange={(e) => setNewAmount(Number(e.target.value))}
               />
-
-              <label htmlFor="category">Categoría:</label>
-              <select
-                id="category"
-                className="select select-ghost w-full max-w-xs select-bordered"
-              >
-                <option value="">Selecciona una categoría</option>
-                {transactionsCategories.map((category, i) => (
-                  <option key={`${i} - ${category}`}>{category}</option>
-                ))}
-              </select>
 
               <div className="flex gap-2 m-auto">
                 <button className="btn" onClick={cancelDeleteTransaction}>

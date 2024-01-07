@@ -33,7 +33,7 @@ export default function TransactionSection({
     <>
       <section className="bg-[#151515] w-[90%] sm:w-[550px] md:w-[750px] py-1 px-2 rounded-lg">
         <article className="flex flex-col items-center justify-between gap-3 p-2 w-full sm:flex-row">
-          <h3 className='mx-2 font-bold text-[.9rem] animated' key={transactionType}>Mis {transactionType}</h3>
+          <h2 className='mx-2 font-bold text-[.9rem] animated' key={transactionType}>Mis {transactionType}</h2>
           <article className='flex gap-3 flex-col sm:flex-row'>
             <button
               className='btn font-bold'
@@ -55,7 +55,7 @@ export default function TransactionSection({
       <ModalTransaction ModalRef={myModalCategoryRef}>
         <h3 className="font-bold text-lg text-center my-3">Agregar {transactionType}</h3>
         <form className='flex flex-col gap-4 m-auto' onSubmit={(e) => e.preventDefault()}>
-          <label>Monto:</label>
+          <label htmlFor="monto">Monto:</label>
           <input
             type="number"
             className="input input-ghost w-full max-w-xs input-bordered"
@@ -82,8 +82,9 @@ export default function TransactionSection({
       <ModalTransaction ModalRef={myModalCreateCategoryRef}>
         <h3 className="font-bold text-lg text-center my-3">Agregar {transactionType}</h3>
         <form className='flex flex-col gap-4 m-auto' onSubmit={(e) => e.preventDefault()}>
-          <label>Monto:</label>
+          <label htmlFor="number">Monto:</label>
           <input
+            id="monto"
             type="number"
             placeholder="ej: 10"
             value={amount !== null ? amount.toString() : ''}
@@ -91,9 +92,9 @@ export default function TransactionSection({
             onChange={onHandleAmountChange}
           />
           {error && <p className="text-[red] text-sm">{error}</p>}
-          <label htmlFor="categoria">Categoría: </label>
+          <label htmlFor="categories">Categoría: </label>
           <select
-            id="category"
+            id="categories"
             onChange={onHandleCategoryChange}
             className={clsx('select select-ghost w-full max-w-x sselect-bordered', transactionsCategories?.length < 1 && 'opacity-50 cursor-not-allowed')}
             disabled={transactionsCategories?.length < 1}

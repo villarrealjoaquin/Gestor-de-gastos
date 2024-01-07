@@ -11,14 +11,14 @@ export default function useLoad() {
       const categoriesData = localStorage.getItem(LocalStorageKeys.CATEGORIES);
       if (categoriesData) {
         setTransactionsCategories(JSON.parse(categoriesData));
-      }
+      };
 
       setIsLocalStorageLoaded(true);
     };
 
     if (typeof window !== 'undefined') {
       loadLocalStorageData();
-    }
+    };
   }, []);
 
   return { transactionsCategories, setTransactionsCategories, isLocalStorageLoaded };
