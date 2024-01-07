@@ -4,4 +4,5 @@ export enum LocalStorageKeys {
   'CATEGORIES' = 'categories',
   'BALANCE' = 'balance',
   'DATA' = 'data',
+  'TRANSACTION_TYPE' = 'transactionType',
 }
