@@ -1,9 +1,11 @@
+import { DataTupla, Transaction } from "@/models";
+
 export const getRandomColor = () => {
   const letters = '0123456789ABCDEF';
   let color = '#';
   for (let i = 0; i < 6; i++) {
     color += letters[Math.floor(Math.random() * 16)];
-  }
+  };
   return color;
 };
 
@@ -14,4 +16,10 @@ export const formatCurrency = (amount: number): string => {
     minimumFractionDigits: 0,
     maximumFractionDigits: 4,
   });
+};
+
+export const addNewTransaction = (dataSet: DataTupla, transaction: Transaction) => {
+  const [state, setState] = dataSet;
+  const newTransaction = [...state, transaction];
+  setState(newTransaction);
 };

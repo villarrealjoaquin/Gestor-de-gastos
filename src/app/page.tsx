@@ -1,11 +1,12 @@
 'use client';
 
 import { expenses, income, initialState } from '@/constants';
-import { calculateTotal, formatCurrency, getRandomColor, processTransactionData, verifyCategories } from '@/helpers';
+import { addNewTransaction, calculateTotal, formatCurrency, getRandomColor, processTransactionData, verifyCategories } from '@/helpers';
 import { useLoad, useMemory } from '@/hooks';
 import type { DataTupla, Transaction, TransactionData, TransactionType, UpdateData } from '@/models';
 import { ERROR_MESSAGES, LocalStorageKeys } from '@/models';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import {
   BalanceTransaction,
   CategoriesTransaction,
@@ -17,13 +18,6 @@ import {
   TransactionList,
   TransactionSection
 } from './components';
-import { toast } from 'sonner';
-
-const addNewTransaction = (dataSet: DataTupla, transaction: Transaction) => {
-  const [state, setState] = dataSet;
-  const newTransaction = [...state, transaction];
-  setState(newTransaction);
-};
 
 export default function Home() {
   const [data, setData] = useMemory<TransactionData>(LocalStorageKeys.DATA, initialState);
@@ -34,8 +28,6 @@ export default function Home() {
   const [transactionAmount, setTransactionAmount] = useState<number | null>(null);
   const [category, setCategory] = useState('');
   const [transactionError, setTransactionError] = useState<ERROR_MESSAGES | string>('');
-  const myModalCategoryRef = useRef<HTMLDialogElement>(null);
-  const myModalCreateCategoryRef = useRef<HTMLDialogElement>(null);
   const { transactionsCategories, isLocalStorageLoaded, setTransactionsCategories } = useLoad();
 
   const transaction: Transaction[] = transactionType === expenses ? expensesData : incomeData;
@@ -51,10 +43,7 @@ export default function Home() {
     if (Number(transactionAmount) < 1) return setTransactionError(ERROR_MESSAGES.AMOUNT_LESS_THAN_ONE);
     if (category.length <= 2) return setTransactionError(ERROR_MESSAGES.CATEGORY_TOO_SHORT);
 
-    const transactionDataSet: DataTupla = transactionType === income
-      ? [incomeData, setIncomeData]
-      : [expensesData, setExpensesData];
-
+    const transactionDataSet: DataTupla = getTransactionDataSet();
     const [dataTransaction] = transactionDataSet;
 
     saveTransaction(dataTransaction, transactionDataSet);
@@ -95,20 +84,19 @@ export default function Home() {
     };
   };
 
-  const updateExistingTransaction = (index: number, dataTransaction: Transaction[]) => {
-    const transaction = dataTransaction[index];
+  const updateExistingTransaction = (index: number, currentData: Transaction[]) => {
+    const transaction = currentData[index];
     if (transaction && transactionAmount) {
       const newAmount = transaction.amount += transactionAmount;
-      const total = calculateTotal(dataTransaction);
-      const { percentages, backgroundColors, labels } = processTransactionData(dataTransaction, total);
-      updateDataAndBalance(newAmount, { percentages, backgroundColors, labels });
+      const updatedData = currentData.map((t, i) =>
+        i === index ? { ...t, amount: newAmount } : t
+      );
+      updateDataAndBalance(newAmount, processTransactionData(updatedData, calculateTotal(updatedData)));
     };
   };
 
   const updateDataAndBalance = (newAmount: number, { labels, percentages, backgroundColors }: UpdateData) => {
-    const formatAmount = formatCurrency(newAmount);
-
-    setBalance(formatAmount);
+    setBalance(formatCurrency(newAmount));
     setData((prevData: TransactionData) => ({
       labels,
       datasets: [{
@@ -120,12 +108,15 @@ export default function Home() {
   };
 
   const updateTransactionState = (newState: Transaction[]) => {
-    const transactionDataSet: DataTupla = transactionType === income
-      ? [incomeData, setIncomeData]
-      : [expensesData, setExpensesData];
-
+    const transactionDataSet: DataTupla = getTransactionDataSet();
     const [_, setState] = transactionDataSet;
     setState(newState);
+  };
+
+  const getTransactionDataSet = (): DataTupla => {
+    return transactionType === income
+      ? [incomeData, setIncomeData]
+      : [expensesData, setExpensesData];
   };
 
   const calculateTotalBalance = () => {
@@ -185,8 +176,6 @@ export default function Home() {
         category={category}
         error={transactionError}
         transactionsCategories={transactionsCategories}
-        myModalCreateCategoryRef={myModalCreateCategoryRef}
-        myModalCategoryRef={myModalCategoryRef}
         onHandleAmountChange={handleAmountChange}
         onHandleCategoryChange={handleCategoryChange}
         onHandleCategoryCreation={handleCategoryCreation}

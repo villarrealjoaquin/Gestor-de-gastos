@@ -4,31 +4,33 @@
 
 body {
   background-color: #69616f;
-  background-color: #222222;
-  background-color: #000;
   color: #fff;
-
+  
   width: 100%;
   height: 100%;
-
-  background: #000000;
+  
   --gap: 5em;
   --line: 1px;
   --color: rgba(255, 255, 255, 0.2);
-
+  
+  background: #000000;
   background-image: linear-gradient(
-      -90deg,
-      transparent calc(var(--gap) - var(--line)),
-      var(--color) calc(var(--gap) - var(--line) + 1px),
-      var(--color) var(--gap)
+    -90deg,
+    transparent calc(var(--gap) - var(--line)),
+    var(--color) calc(var(--gap) - var(--line) + 1px),
+    var(--color) var(--gap)
     ),
     linear-gradient(
       0deg,
       transparent calc(var(--gap) - var(--line)),
       var(--color) calc(var(--gap) - var(--line) + 1px),
       var(--color) var(--gap)
-    );
-  background-size: var(--gap) var(--gap);
+      );
+      background-size: var(--gap) var(--gap);
+      background-color: #282727;
+      background-color: #222222;
+      background-color: #2a2929;
+      background-color: #000;
 }
 
 section::-webkit-scrollbar {

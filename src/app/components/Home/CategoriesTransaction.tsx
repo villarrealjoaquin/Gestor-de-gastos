@@ -10,24 +10,22 @@ export default function CategoriesTransaction({ transactionList }: Props) {
     <>
       <section className='overflow-x-auto flex items-center w-[90%] h-14 text-center sm:w-[550px] sm:h-14 md:w-[750px] scroll'>
         {transactionList.length > 0 ? (
-          <>
-            <ItemList
-              list={transactionList}
-              className='flex gap-3 items-center text-center'
-              renderList={(item) => (
-                <article className='flex animated'>
-                  <button
-                    key={item.fuente}
-                    className='btn font-bold text-white no-animation '
-                    style={{ backgroundColor: item.color }}
-                  >
-                    {item.category}
-                  </button>
-                </article>
-              )}
-              extractId={(item) => item.fuente}
-            />
-          </>
+          <ItemList
+            list={transactionList}
+            className='flex gap-3 items-center text-center'
+            renderList={(item) => (
+              <article className='flex animated'>
+                <button
+                  key={item.fuente}
+                  className='btn font-bold text-white no-animation '
+                  style={{ backgroundColor: item.color }}
+                >
+                  {item.category}
+                </button>
+              </article>
+            )}
+            extractId={(item) => item.fuente}
+          />
         ) : (
           <article className='flex items-center h-12'>
             <p className='text-[.75rem] sm:text-sm text-center font-bold'>

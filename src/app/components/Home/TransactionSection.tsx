@@ -1,11 +1,10 @@
 import type { TransactionType } from "@/models"
 import { ModalTransaction } from "..";
 import clsx from "clsx";
+import { useRef } from "react";
 
 interface Props {
   transactionType: TransactionType;
-  myModalCreateCategoryRef: React.RefObject<HTMLDialogElement>;
-  myModalCategoryRef: React.RefObject<HTMLDialogElement>;
   category: string;
   error: string;
   amount: number | null;
@@ -18,8 +17,6 @@ interface Props {
 
 export default function TransactionSection({
   transactionType,
-  myModalCreateCategoryRef,
-  myModalCategoryRef,
   category,
   amount,
   transactionsCategories,
@@ -29,6 +26,9 @@ export default function TransactionSection({
   onHandleTransactionSave,
   onHandleCategoryChange,
 }: Props) {
+  const myModalCategoryRef = useRef<HTMLDialogElement>(null);
+  const myModalCreateCategoryRef = useRef<HTMLDialogElement>(null);
+
   return (
     <>
       <section className="bg-[#151515] w-[90%] sm:w-[550px] md:w-[750px] py-1 px-2 rounded-lg">

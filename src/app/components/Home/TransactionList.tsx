@@ -41,13 +41,10 @@ export default function TransactionList({
   };
 
   const confirmDeleteTransaction = () => {
-    const transactionListIndex = transactionList.findIndex(
-      transaction => transaction.fuente === selectedTransaction
+    const updatedTransactionList = transactionList.filter(
+      transaction => transaction.fuente !== selectedTransaction
     );
-
-    if (transactionListIndex === -1) return;
-    transactionList.splice(transactionListIndex, 1);
-    updateTransactionState([...transactionList]);
+    updateTransactionState(updatedTransactionList);
     cancelDeleteTransaction();
     toast.success('se elimino la transaccion correctamente!');
   };
