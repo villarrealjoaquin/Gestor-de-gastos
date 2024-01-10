@@ -1,10 +1,10 @@
 import { expenses } from "@/constants";
 import { formatCurrency } from "@/helpers";
 import type { Transaction, TransactionType } from "@/models";
+import { showErrorMessage, showSuccessMessage } from "@/utils/toast";
 import clsx from "clsx";
 import { useRef, useState } from "react";
 import { Loader, ModalTransaction } from "..";
-import { toast } from "sonner";
 
 interface Props {
   transactionList: Transaction[];
@@ -46,7 +46,7 @@ export default function TransactionList({
     );
     updateTransactionState(updatedTransactionList);
     cancelDeleteTransaction();
-    toast.success('se elimino la transaccion correctamente!');
+    showErrorMessage('se elimino la transaccion correctamente!');
   };
 
   const selectActionFromModal = (action: ActionType) => {
@@ -63,7 +63,7 @@ export default function TransactionList({
 
     updateTransactionState(modifyTransaction);
     cancelDeleteTransaction();
-    toast.success('se modifico el monto correctamente!');
+    showSuccessMessage('se modifico el monto correctamente!');
   };
 
   const cancelDeleteTransaction = () => {

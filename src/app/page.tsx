@@ -5,8 +5,8 @@ import { addNewTransaction, calculateTotal, formatCurrency, getRandomColor, proc
 import { useLoad, useMemory } from '@/hooks';
 import type { DataTupla, Transaction, TransactionData, TransactionType, UpdateData } from '@/models';
 import { ERROR_MESSAGES, LocalStorageKeys } from '@/models';
+import { showSuccessMessage } from '@/utils/toast';
 import { useCallback, useEffect, useState } from 'react';
-import { toast } from 'sonner';
 import {
   BalanceTransaction,
   CategoriesTransaction,
@@ -49,7 +49,7 @@ export default function Home() {
     saveTransaction(dataTransaction, transactionDataSet);
     clearInputs();
     ref.current?.close();
-    toast.success(`Se creo correctamente su ${transactionType === income ? 'ingreso' : 'gasto'}`);
+    showSuccessMessage(`Se creo correctamente su ${transactionType === income ? 'ingreso' : 'gasto'}`);
   };
 
   const validateTransactionData = (data: Transaction[]) => {
@@ -96,7 +96,11 @@ export default function Home() {
   };
 
   const updateDataAndBalance = (newAmount: number, { labels, percentages, backgroundColors }: UpdateData) => {
-    setBalance(formatCurrency(newAmount));
+    const formatAmount = formatCurrency(newAmount);
+    const cleanedAmount = formatAmount.replace(/[^0-9.-]+/g, '');
+    const numericAmount = parseFloat(cleanedAmount);
+
+    setBalance(numericAmount);
     setData((prevData: TransactionData) => ({
       labels,
       datasets: [{
