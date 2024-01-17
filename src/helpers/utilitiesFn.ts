@@ -23,3 +23,9 @@ export const addNewTransaction = (dataSet: DataTupla, transaction: Transaction) 
   const newTransaction = [...state, transaction];
   setState(newTransaction);
 };
+
+export const formatCurrentAndSetNumber = (newAmount: number) => {
+  const formatAmount = formatCurrency(newAmount);
+  const cleanedAmount = formatAmount.replace(/[^0-9.-]+/g, '');
+  return parseFloat(cleanedAmount);
+};

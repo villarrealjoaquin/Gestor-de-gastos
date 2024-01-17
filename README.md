@@ -1,22 +1,22 @@
-# Gestor de Gastos
+# Expense Manager
 
-Este es un proyecto de gestor de gastos desarrollado con Next.js, TypeScript y Tailwind CSS. Te permite llevar un registro de tus gastos diarios y realizar un seguimiento de tu presupuesto.
+This is an expense manager project developed with Next.js, TypeScript, and Tailwind CSS. It allows you to keep track of your daily expenses and monitor your budget.
 
-## Características
+## Features
 
-- **Registro de Gastos:** Ingresa tus gastos diarios y clasifícalos según categorías.
-- **Seguimiento de Presupuesto:** Visualiza tu presupuesto total y realiza un seguimiento de tus gastos.
-- **Interfaz Intuitiva:** Diseño amigable y fácil de usar para una experiencia de usuario agradable.
+- **Expense Logging:** Enter your daily expenses and categorize them accordingly.
+- **Budget Tracking:** Visualize your total budget and keep track of your expenses.
+- **Intuitive Interface:** User-friendly and easy-to-use design for a pleasant user experience.
 
-## Tecnologías Utilizadas
+## Technologies Used
 
-- **Next.js:** React framework que facilita el desarrollo de aplicaciones web modernas.
-- **TypeScript:** Superset de JavaScript que añade tipado estático para mejorar la robustez del código.
-- **Tailwind CSS:** Framework de diseño sin opiniones que facilita el desarrollo de interfaces estilizadas.
+- **Next.js:** React framework that simplifies the development of modern web applications.
+- **TypeScript:** JavaScript superset that adds static typing to enhance code robustness.
+- **Tailwind CSS:** Opinion-free design framework that facilitates the development of styled interfaces.
 
-## Requisitos Previos
+## Prerequisites
 
-Asegúrate de tener Node.js y npm instalados en tu máquina antes de comenzar.
+Make sure you have Node.js and npm installed on your machine before getting started.
 
 ## Preview
 
@@ -24,8 +24,9 @@ Asegúrate de tener Node.js y npm instalados en tu máquina antes de comenzar.
 [![image.webp](https://i.postimg.cc/Z5ZsSyD3/image.webp)](https://postimg.cc/ykQyhWKY)
 [![image.webp](https://i.postimg.cc/P543rrB7/image.webp)](https://postimg.cc/688LMw6V)
 
-## Contribuciones
-¡Contribuciones son bienvenidas! Si encuentras algún problema o tienes alguna mejora, por favor abre un problema o envía un pull request.
+## Contributions
+
+Contributions are welcome! If you encounter any issues or have any improvements, please open an issue or submit a pull request.
 
 ## Deploy 
 

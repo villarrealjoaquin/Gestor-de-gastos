@@ -109,8 +109,7 @@ export default function TransactionList({
         </section>
       ) : (
         <article className="flex flex-col justify-center items-center h-[200px]">
-          <Loader />
-          <p className="font-bold mt-4">Todavía no hay {transactionType === expenses ? 'gastos' : 'ingresos'}</p>
+          <p className="font-bold mt-4">Todavía no agregaste transacciones</p>
         </article>
       )}
 
@@ -170,7 +169,6 @@ export default function TransactionList({
               </div>
             </>
           )}
-
         </form>
       </ModalTransaction>
     </section>

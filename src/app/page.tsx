@@ -6,7 +6,7 @@ import { useLoad, useMemory } from '@/hooks';
 import type { DataTupla, Transaction, TransactionData, TransactionType, UpdateData } from '@/models';
 import { ERROR_MESSAGES, LocalStorageKeys } from '@/models';
 import { showSuccessMessage } from '@/utils/toast';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   BalanceTransaction,
   CategoriesTransaction,
@@ -32,12 +32,12 @@ export default function Home() {
 
   const transaction: Transaction[] = transactionType === expenses ? expensesData : incomeData;
 
-  const calculateAndSetPercentages = useCallback(() => {
+  const calculateAndSetPercentages = () => {
     let dataSet = transaction;
     const total = calculateTotal(dataSet);
     const { percentages, backgroundColors, labels } = processTransactionData(dataSet, total);
     updateDataAndBalance(total, { percentages, backgroundColors, labels });
-  }, [expensesData, incomeData, transactionType]);
+  };
 
   const handleTransactionSave = (ref: React.RefObject<HTMLDialogElement>) => {
     if (Number(transactionAmount) < 1) return setTransactionError(ERROR_MESSAGES.AMOUNT_LESS_THAN_ONE);
@@ -96,11 +96,8 @@ export default function Home() {
   };
 
   const updateDataAndBalance = (newAmount: number, { labels, percentages, backgroundColors }: UpdateData) => {
-    const formatAmount = formatCurrency(newAmount);
-    const cleanedAmount = formatAmount.replace(/[^0-9.-]+/g, '');
-    const numericAmount = parseFloat(cleanedAmount);
-
-    setBalance(numericAmount);
+    const format = formatCurrency(newAmount)
+    setBalance(format);
     setData((prevData: TransactionData) => ({
       labels,
       datasets: [{
@@ -155,12 +152,12 @@ export default function Home() {
 
   useEffect(() => {
     calculateAndSetPercentages();
-  }, [calculateAndSetPercentages]);
+  }, [expensesData, incomeData, transactionType]);
 
   if (!isLocalStorageLoaded) return <Skeleton />
 
   return (
-    <main className="flex flex-col gap-3 items-center min-h-screen py-3">
+    <main className="flex flex-col gap-3 justify-center items-center min-h-screen py-3">
       <GraphicDataContainer>
         <ToggleButtonTransaction
           onHandleTransactionTypeToggle={handleTransactionTypeToggle}
